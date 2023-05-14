@@ -7,6 +7,7 @@ import os
 import argparse
 from global_utils import get_file_name, make_dir, plot_sales_data
 from datetime import datetime
+from collections import defaultdict
 import json
 
 
@@ -44,6 +45,16 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     }
     """
     ######################################## YOUR CODE HERE ##################################################
+    data_gen = (row for row in dp.data_reader)
+    #Skipping the first row as its the column names
+    _ = next(data_gen)
+    #Initializing a default dictionary first
+    rev_agg = defaultdict(lambda: 0)
+    
+    for row in tqdm(data_gen):
+        rev_agg[row['Country']] += float(row['UnitPrice']) * int(row['Quantity'])
+        
+    return rev_agg
 
     ######################################## YOUR CODE HERE ##################################################
 
